@@ -12,3 +12,7 @@ export const dottedNumber = (int: number) => {
 	return newNumber;
 
 }
+
+const calcTotalPallets = () => {
+	
+}

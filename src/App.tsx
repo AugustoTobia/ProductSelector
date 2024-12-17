@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
-import ProductSelector from './components/ProductSelector.tsx';
-import { products } from './common/mock.ts'
+import ProductSelector from './components/ProductSelector';
+import { products } from './common/mock'
+
 function App() {
 	return (
 		<div className="App flex flex-col items-center gap-y-6 bg-gray-light">

@@ -8,12 +8,14 @@
     "cra-template-typescript": "1.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "typescript": "^5.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "jest": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -35,7 +37,15 @@
     ]
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.26.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^16.1.0",
     "@tsconfig/create-react-app": "^2.0.5",
-    "tailwindcss": "^3.4.16"
+    "@types/jest": "^29.5.14",
+    "identity-obj-proxy": "^3.0.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "tailwindcss": "^3.4.16",
+    "ts-jest": "^29.2.5"
   }
 }
