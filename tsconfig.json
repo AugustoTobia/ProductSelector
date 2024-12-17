@@ -1,0 +1,9 @@
+{
+	"extends": "@tsconfig/create-react-app/tsconfig.json",
+	"compilerOptions": {
+		"typeRoots": [
+			"node_modules/@types",
+			"src/types"
+		]
+	}
+}
