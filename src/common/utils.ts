@@ -13,6 +13,11 @@ export const dottedNumber = (int: number) => {
 
 }
 
-const calcTotalPallets = () => {
-	
+export const calcGroups = (required: number, group: number) => {
+	return Math.ceil(required/group);
 }
+
+
+export const trimText = (text: string, chLimit: number) => {
+	return text.length > chLimit ? text.slice(0, chLimit) + '...' : text;
+};

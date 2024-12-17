@@ -10,15 +10,25 @@ export type Product = {
 	unitValue?: number,
 }
 
+export type ListedProduct = {
+	product: Product,
+	quantity: number
+}
+
 export type Cart = {
 	id: string,
-	items: {
-		product: Product,
-		quantity: number
-	}[],
-	createdAt: Date
+	items: ListedProduct[],
+	createdAt?: string
 }
 
 export interface ProductWithImage extends Product {
 	imgSrc: string;
+}
+
+export type CartContextProps = {
+	initCart: () => void,
+	destroyCart: () => void,
+	addItemToCart: (item: ListedProduct) => void,
+	removeItemFromCart: (itemToRemove: ListedProduct) => void,
+	cartState: Cart;
 }

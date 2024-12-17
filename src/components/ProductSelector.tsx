@@ -1,18 +1,23 @@
 import React, { FC, useState } from "react";
 import { ProductWithImage } from "../types/types";
-import { dottedNumber } from "../common/utils";
+import { calcGroups, dottedNumber } from "../common/utils";
+import { useCartContext } from "../CartContext";
 
-const ProductSelector: FC<ProductWithImage> = ({
-	imgSrc,
-	id,
-	title,
-	description,
-	price,
-	listingPrice,
-	stock,
-	salesUnit,
-	measurementUnit,
-	unitValue }) => {
+const ProductSelector: FC<ProductWithImage> = (product) => {
+
+	const {
+		imgSrc,
+		id,
+		title,
+		description,
+		price,
+		listingPrice,
+		stock,
+		salesUnit,
+		measurementUnit,
+		unitValue } = product
+
+	const { addItemToCart, removeItemFromCart } = useCartContext()
 
 	const [state, setState] = useState()
 
@@ -49,7 +54,7 @@ const ProductSelector: FC<ProductWithImage> = ({
 				<p className="text-start text-gray font-semibold">
 					{description}
 				</p>
-				<button onClick={() => { }}>comprar</button>
+				<button onClick={() => { addItemToCart({ product: product, quantity: 1 }) }}>comprar</button>
 				<button onClick={() => { }}>agregar</button>
 			</div>
 		</div>

@@ -1,4 +1,4 @@
-import { dottedNumber } from './utils';
+import { calcGroups, dottedNumber } from './utils';
 
 describe('dottedNumber', () => {
 	test('should return the same number as a string if less than 1000', () => {
@@ -14,6 +14,8 @@ describe('dottedNumber', () => {
 	})
 })
 
-describe.skip('', () => {
-
+describe('calcGroups', () => {
+	it('returns rounded up', () => {
+		expect(calcGroups(10.2, 2)).toEqual(6)
+	})
 })
