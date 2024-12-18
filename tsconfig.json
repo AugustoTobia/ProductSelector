@@ -8,7 +8,9 @@
 		],
 		"typeRoots": [
 			"node_modules/@types",
-			"src/types"
+			"src/types",
+			"jest",
+			"@testing-library/jest-dom"
 		],
 	},
 	"moduleResolution": "node",

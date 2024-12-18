@@ -26,9 +26,24 @@ export interface ProductWithImage extends Product {
 }
 
 export type CartContextProps = {
-	initCart: () => void,
 	destroyCart: () => void,
 	addItemToCart: (item: ListedProduct) => void,
-	removeItemFromCart: (itemToRemove: ListedProduct) => void,
+	removeItemFromCart: (itemToRemove: Product) => void,
 	cartState: Cart;
 }
+
+export type QuantitySelectorProps = {
+	salesUnit: "group" | "unit" | "area",
+	unitValue?: number
+	product: Product
+}
+
+export enum labelUnit {
+		group = 'Bundle',
+		area = 'Tiles'
+	}
+
+export enum customValueLabel {
+		group = 'Units',
+		area = 'm2'
+	}
