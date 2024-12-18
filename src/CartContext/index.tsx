@@ -1,6 +1,6 @@
 
-import { createContext, useContext, useState } from 'react';
-import { Cart, ListedProduct, CartContextProps } from '../types/types';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { Cart, ListedProduct, CartContextProps, Product } from '../types/types';
 import { v4 as uuid } from 'uuid';
 
 export const CartContext = createContext<CartContextProps | null>(null);
@@ -14,18 +14,22 @@ const initialState: Cart = {
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 	const [cartState, setCartState] = useState<Cart>(initialState);
 
-	const initCart = () => {
-		setCartState({ ...cartState, id: uuid(), createdAt: Date.now().toString() })
-	}
+	useEffect(() => {
+		if (!cartState.items.length) {
+			destroyCart()
+		}
+	}, [cartState])
 
 	const destroyCart = () => {
 		setCartState(initialState)
 	}
 
 	const addItemToCart = (newItem: ListedProduct) => {
+		if (newItem.quantity <= 0) { removeItemFromCart(newItem.product); return; }
+
 		setCartState((prevState) => {
 			let newState: Cart = prevState;
-
+			//if cart was not created, create new cart
 			if (!newState.id) {
 				newState = { ...newState, id: uuid(), createdAt: Date.now().toString() }
 			}
@@ -33,8 +37,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 			const repeatedProduct = prevState.items.find(item => item.product.id === newItem.product.id)
 			if (repeatedProduct) {
 				const repeatedProductIndex = newState.items.indexOf(repeatedProduct)
-				const accumulation = { ...repeatedProduct, quantity: repeatedProduct.quantity + newItem.quantity }
-				newState = { ...newState, items: newState.items.toSpliced(repeatedProductIndex, 1, accumulation) }
+				newState = { ...newState, items: newState.items.toSpliced(repeatedProductIndex, 1, newItem) }
 
 				return newState
 			}
@@ -45,13 +48,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 		})
 	}
 
-	const removeItemFromCart = (itemToRemove: ListedProduct) => {
+	const removeItemFromCart = (itemToRemove: Product) => {
 		setCartState((prevState) => {
 			let newState: Cart = prevState;
 			if (!newState.items.length) {
 				return newState;
 			}
-			const filteredItems = newState.items.filter(item => item.product.id !== itemToRemove.product.id)
+			const filteredItems = newState.items.filter(item => item.product.id !== itemToRemove.id)
 			newState = { ...newState, items: [...filteredItems] }
 
 			return newState;
@@ -61,7 +64,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<CartContext.Provider
 			value={{
-				initCart,
 				destroyCart,
 				addItemToCart,
 				removeItemFromCart,
@@ -73,7 +75,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 	);
 };
 
-export const useCartContext = () => {
+export const useCartContext = (): CartContextProps => {
 	const cartContext = useContext(CartContext);
 
 	if (!cartContext) {

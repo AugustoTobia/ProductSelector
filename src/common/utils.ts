@@ -13,10 +13,9 @@ export const dottedNumber = (int: number) => {
 
 }
 
-export const calcGroups = (required: number, group: number) => {
-	return Math.ceil(required/group);
+export const calcGroups = (totalRequested: number, groupSize: number = 1) => {
+	return Math.ceil(totalRequested/groupSize);
 }
-
 
 export const trimText = (text: string, chLimit: number) => {
 	return text.length > chLimit ? text.slice(0, chLimit) + '...' : text;
