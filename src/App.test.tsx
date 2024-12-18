@@ -1,8 +1,13 @@
-import { render} from '@testing-library/react';
+import { render } from '@testing-library/react';
 import App from './App';
+import { CartProvider } from './CartContext';
 import '@testing-library/jest-dom'
 
-test('renders learn react link', () => {
-  const element =  render(<App />);
-  expect(element).toBeDefined();
+test('renders the App', () => {
+	const element = render(
+		<CartProvider>
+			<App />
+		</CartProvider>
+	);
+	expect(element).toBeDefined();
 });
