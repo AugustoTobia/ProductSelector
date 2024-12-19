@@ -17,7 +17,7 @@ const Cart = () => {
 							{item.quantity + ' ' + (item.product.measurementUnit || 'unit')}
 						</span>
 						<button onClick={() => removeItemFromCart(item.product)}>
-							<MdDelete />
+							<MdDelete size={25}/>
 						</button>
 					</li>
 				)

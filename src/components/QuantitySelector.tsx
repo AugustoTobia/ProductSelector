@@ -1,6 +1,6 @@
 import { FC, useEffect, useId, useState } from "react";
 
-import { customValueLabel, labelUnit, QuantitySelectorProps } from "../types/types";
+import { customValueLabel, labelUnit, ListedProduct, QuantitySelectorProps } from "../types/types";
 import { calcGroups } from "../common/utils";
 
 import { useCartContext } from "../CartContext";
@@ -24,8 +24,11 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 
 	const handleChangeUnits = (newQuantity: number) => {
 		const truncated = Math.trunc(newQuantity)
+
 		setState(() => {
 			if (newQuantity < 0) return { unit: 0, group: 0 }
+			if (isGroup && newQuantity > product.stock * unitValue!) return { unit: product.stock * unitValue!, group: product.stock }
+			if (!isGroup && newQuantity > product.stock) return { unit: product.stock, group: 0 }
 			return { unit: truncated, group: calcGroups(truncated, unitValue) }
 		})
 	}
@@ -34,61 +37,69 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 		const truncated = Math.trunc(newQuantity)
 		setState(() => {
 			if (newQuantity < 0) return { unit: 0, group: 0 }
+			if (newQuantity > product.stock) return { unit: product.stock * unitValue!, group: product.stock }
 			return { unit: unitValue! * truncated, group: truncated }
 		})
 	}
 
-	return (<div>
-		{isGroup
-			? <div className="flex gap-x-2">
-				<label htmlFor={unitLabelId}>{customValueLabel[salesUnit]}</label>
-				<input
-					type="number"
-					id={unitLabelId}
-					className={`text-center border-2 rounded w-12`}
-					max={product.stock * unitValue!}
-					value={state.unit}
-					onChange={(e) => handleChangeUnits(Number(e.target.value))}
-				/>
-				<label htmlFor={groupLabelId}>{labelUnit[salesUnit]}</label>
-				<input
-					type="number"
-					id={groupLabelId}
-					max={product.stock}
-					className={`text-center border-2 rounded w-12`}
-					value={state.group}
-					step={1}
-					onChange={(e) => handleChangeGroups(Number(e.target.value))}
-				/>
-			</div>
-			: <div className="flex gap-x-2">
-				<label htmlFor={unitInGroupLabelId}>Units</label>
-				<input
-					type="number"
-					id={unitInGroupLabelId}
-					className={`text-center border-2 rounded w-12`}
-					value={state.unit}
-					max={product.stock}
-					onChange={(e) => handleChangeUnits(Number(e.target.value))}
-				/>
-			</div>
+	const handleSubmit = (submitted: ListedProduct) => {
+		let newProduct = submitted
+		if (submitted.quantity > product.stock) {
+			newProduct.quantity = product.stock
+
 		}
+		addItemToCart(newProduct)
+	}
+
+	return (<div className="w-full flex flex-col">
+		<div className="flex gap-x-4 w-full justify-center">
+			{isGroup
+				? <>
+					<div className="flex gap-x-2">
+						<label htmlFor={unitLabelId}>{customValueLabel[salesUnit]}</label>
+						<input
+							type="number"
+							id={unitLabelId}
+							className={`text-center border-2 rounded w-12`}
+							max={product.stock * unitValue!}
+							value={state.unit}
+							onChange={(e) => handleChangeUnits(Number(e.target.value))}
+						/>
+					</div>
+					<div className="flex gap-x-2">
+						<label htmlFor={groupLabelId}>{labelUnit[salesUnit]}</label>
+						<input
+							type="number"
+							id={groupLabelId}
+							max={product.stock}
+							className={`text-center border-2 rounded w-12`}
+							value={state.group}
+							step={1}
+							onChange={(e) => handleChangeGroups(Number(e.target.value))}
+						/>
+					</div>
+				</>
+				: <div className="flex gap-x-2">
+					<label htmlFor={unitInGroupLabelId}>Units</label>
+					<input
+						type="number"
+						id={unitInGroupLabelId}
+						className={`text-center border-2 rounded w-12`}
+						value={state.unit}
+						max={product.stock}
+						onChange={(e) => handleChangeUnits(Number(e.target.value))}
+					/>
+				</div>
+			}
+		</div>
 
 		<div className="flex flex-col gap-y-2 m-2">
-			{isInCart
-				? <button
-					className="rounded-lg bg-blue w-200 text-white font-bold p-1"
-					onClick={() => { addItemToCart({ product: product, quantity: isGroup ? state.group : state.unit }) }}
-				>
-					Change quantity
-				</button>
-				: <button
-					className="rounded-lg bg-blue w-200 text-white font-bold p-1"
-					onClick={() => { addItemToCart({ product: product, quantity: isGroup ? state.group : state.unit }) }}
-				>
-					Add to Cart
-				</button>
-			}
+			<button
+				className="rounded-lg bg-blue w-200 text-white font-bold p-1"
+				onClick={() => { addItemToCart({ product: product, quantity: isGroup ? state.group : state.unit }) }}
+			>
+				{isInCart ? 'Change quantity' : 'Add to Cart'}
+			</button>
 
 			<button
 				className={`${!isInCart && 'invisible'} rounded-lg border-2 border-blue w-200 text-blue font-bold p-1`}

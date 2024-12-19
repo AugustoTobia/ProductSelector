@@ -33,13 +33,14 @@ const CartContainer = ({ children }: { children: React.ReactNode }) => {
 				flex-col
 				${isMaximized
 					? 'h-[200px] w-full lg:w-[400px]'
-					: 'm-6 h-[30px] w-[40px]'
+					: 'm-6 h-[40px] w-[40px]'
 				}
 			`}
 		>
 			<div className="flex items-center justify-between">
 				{!isMaximized && <FaAngleUp
 					color="white"
+					size={25}
 					className="mx-auto cursor-pointer"
 					onClick={() => setMaximized(true)}
 				/>}
@@ -49,6 +50,7 @@ const CartContainer = ({ children }: { children: React.ReactNode }) => {
 					<FaAngleDown
 						color="white"
 						className="cursor-pointer"
+						size={25}
 						onClick={() => setMaximized(false)}
 					/>
 				</>

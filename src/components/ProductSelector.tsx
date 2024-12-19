@@ -33,7 +33,7 @@ const ProductSelector: FC<ProductWithImage> = (product) => {
 
 				{stock > 0
 					? <span className="flex items-center text-green gap-x-px">
-						Product in stock! <FaRegCheckCircle color="green" />
+						{`Product in stock! (${product.stock})`} <FaRegCheckCircle color="green" />
 					</span>
 					: <span className="flex items-center text-red gap-x-px">
 						Product not available <MdOutlineCancel color="red" />
