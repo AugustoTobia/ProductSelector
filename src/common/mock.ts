@@ -1,4 +1,5 @@
 import { ProductWithImage } from '../types/types';
+
 import bricks from '../common/img/bricks.jpg';
 import tile from '../common/img/tile.jpg';
 import rods from '../common/img/rods.jpg';
@@ -40,11 +41,10 @@ export const products: ProductWithImage[] = [
 	},
 	{
 		imgSrc: rods,
-		id: '10035',
-		title: 'Hierro 25 mm x 12 m Acindar',
-		description: 'HIERRO 25 MM X 12M',
-		price: 76293,
-		listingPrice: 89757,
+		id: '10045',
+		title: 'Aluminio 20 mm x 12 m Acindar',
+		description: 'ALUMINIO 20 MM X 12M',
+		price: 56293,
 		stock: 0,
 		salesUnit: 'unit',
 	

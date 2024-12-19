@@ -1,40 +1,42 @@
 import { FC, useEffect, useId, useState } from "react";
-import { calcGroups } from "../common/utils";
-import { useCartContext } from "../CartContext";
+
 import { customValueLabel, labelUnit, QuantitySelectorProps } from "../types/types";
+import { calcGroups } from "../common/utils";
+
+import { useCartContext } from "../CartContext";
 
 const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, product }) => {
 	const [state, setState] = useState({ unit: 0, group: 0 });
 	const [isInCart, setIsInCart] = useState(false);
 	const { addItemToCart, removeItemFromCart, cartState } = useCartContext()
+	const groupLabelId = useId();
+	const unitInGroupLabelId = useId();
+	const unitLabelId = useId();
 
 	useEffect(() => {
 		if (cartState.items.find(item => item.product.id === product.id)) {
 			setIsInCart(true)
 		} else { setIsInCart(false) }
 
-	}, [cartState])
+	}, [cartState, product.id])
 
 	const isGroup = salesUnit !== 'unit'
 
 	const handleChangeUnits = (newQuantity: number) => {
-
+		const truncated = Math.trunc(newQuantity)
 		setState(() => {
 			if (newQuantity < 0) return { unit: 0, group: 0 }
-			return { unit: newQuantity, group: calcGroups(newQuantity, unitValue) }
+			return { unit: truncated, group: calcGroups(truncated, unitValue) }
 		})
 	}
 
 	const handleChangeGroups = (newQuantity: number) => {
+		const truncated = Math.trunc(newQuantity)
 		setState(() => {
 			if (newQuantity < 0) return { unit: 0, group: 0 }
-			return { unit: unitValue! * newQuantity, group: newQuantity }
+			return { unit: unitValue! * truncated, group: truncated }
 		})
 	}
-
-	const groupLabelId = useId();
-	const unitInGroupLabelId = useId();
-	const unitLabelId = useId();
 
 	return (<div>
 		{isGroup
@@ -43,7 +45,7 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 				<input
 					type="number"
 					id={unitLabelId}
-					className={`border-2 rounded w-12`}
+					className={`text-center border-2 rounded w-12`}
 					max={product.stock * unitValue!}
 					value={state.unit}
 					onChange={(e) => handleChangeUnits(Number(e.target.value))}
@@ -53,8 +55,9 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 					type="number"
 					id={groupLabelId}
 					max={product.stock}
-					className={`border-2 rounded w-12`}
+					className={`text-center border-2 rounded w-12`}
 					value={state.group}
+					step={1}
 					onChange={(e) => handleChangeGroups(Number(e.target.value))}
 				/>
 			</div>
@@ -63,7 +66,7 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 				<input
 					type="number"
 					id={unitInGroupLabelId}
-					className={`border-2 rounded w-12`}
+					className={`text-center border-2 rounded w-12`}
 					value={state.unit}
 					max={product.stock}
 					onChange={(e) => handleChangeUnits(Number(e.target.value))}
@@ -96,7 +99,6 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 		</div>
 	</div>
 	)
-
 }
 
 export default QuantitySelector;

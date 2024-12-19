@@ -1,7 +1,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Cart, ListedProduct, CartContextProps, Product } from '../types/types';
 import { v4 as uuid } from 'uuid';
+import { Cart, ListedProduct, CartContextProps, Product } from '../types/types';
 
 export const CartContext = createContext<CartContextProps | null>(null);
 
@@ -29,7 +29,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
 		setCartState((prevState) => {
 			let newState: Cart = prevState;
-			//if cart was not created, create new cart
 			if (!newState.id) {
 				newState = { ...newState, id: uuid(), createdAt: Date.now().toString() }
 			}

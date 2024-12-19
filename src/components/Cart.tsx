@@ -1,16 +1,11 @@
-import React, { useEffect } from "react";
+import { MdDelete } from "react-icons/md";
 import { useCartContext } from "../CartContext";
 import { trimText } from "../common/utils";
-import { MdDelete } from "react-icons/md";
 
 const Cart = () => {
 	const { cartState, removeItemFromCart } = useCartContext();
-	useEffect(() => { }, [cartState])
 
-	return (<div className="bg-green w-[200px] p-2 rounded-lg flex flex-col">
-		<h1 className="font-black text-white">
-			In Cart
-		</h1>
+	return (
 		<ul className="flex flex-col w-full gap-y-2 bg-green-light p-2 rounded-lg">
 			{cartState.items.map(item => {
 				return (
@@ -19,7 +14,7 @@ const Cart = () => {
 							{trimText(item.product.title, 10)}
 						</span>
 						<span>
-							{item.quantity}
+							{item.quantity + ' ' + (item.product.measurementUnit || 'unit')}
 						</span>
 						<button onClick={() => removeItemFromCart(item.product)}>
 							<MdDelete />
@@ -29,7 +24,7 @@ const Cart = () => {
 			})
 			}
 		</ul>
-	</div>)
+	)
 }
 
 export default Cart;

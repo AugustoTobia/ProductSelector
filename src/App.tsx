@@ -1,17 +1,16 @@
-import './App.css';
 import ProductSelector from './components/ProductSelector';
 import { products } from './common/mock'
-import { useCartContext } from './CartContext';
 import Cart from './components/Cart';
+import CartContainer from './components/CartContainer';
 
 function App() {
-	const { cartState } = useCartContext()
+
 	return (
-		<div className="App flex flex-col items-center gap-y-6 bg-gray-light">
+		<div className="flex flex-col items-center gap-y-6 bg-gray-light">
 			{products.map(item => <ProductSelector key={item.id} {...item} />)}
-			{cartState.id && <div className='bottom-2 right-4 z-10 max-w-[500px] fixed'>
+			<CartContainer>
 				<Cart />
-			</div>}
+			</CartContainer>
 		</div>
 	);
 }

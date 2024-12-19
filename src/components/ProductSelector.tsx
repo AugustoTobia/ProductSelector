@@ -1,12 +1,13 @@
 import { FC } from "react";
+
 import { ProductWithImage } from "../types/types";
 import { dottedNumber } from "../common/utils";
+
 import QuantitySelector from "./QuantitySelector";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { MdOutlineCancel } from "react-icons/md";
 
 const ProductSelector: FC<ProductWithImage> = (product) => {
-
 	const {
 		imgSrc,
 		id,
@@ -20,7 +21,7 @@ const ProductSelector: FC<ProductWithImage> = (product) => {
 
 	return (
 		<div className="flex flex-col lg:flex-row items-center w-full lg:max-w-[50%] bg-[#fff] p-2">
-			<img src={imgSrc} className="w-1/2 object-contain max-h-[300px]" />
+			<img alt={title} src={imgSrc} className="w-1/2 object-contain max-h-[300px]" />
 
 			<div className="flex flex-col m-2 w-full items-center lg:items-start lg:w-1/2">
 				<span className="text-xs text-gray font-semibold">
@@ -44,6 +45,7 @@ const ProductSelector: FC<ProductWithImage> = (product) => {
 						<div className="font-bold text-xl">
 							${dottedNumber(listingPrice)}
 						</div>
+						{unitValue && salesUnit === 'group' && <span>${dottedNumber(listingPrice / unitValue)} each unit</span>}
 						<div className="line-through text-gray font-semibold">
 							${dottedNumber(price)}
 						</div>
@@ -58,7 +60,7 @@ const ProductSelector: FC<ProductWithImage> = (product) => {
 				</p>
 				{Boolean(product.stock) && <QuantitySelector salesUnit={salesUnit} unitValue={unitValue} product={product} />}
 			</div>
-		</div>
+		</div >
 
 	)
 }
