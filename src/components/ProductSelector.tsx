@@ -21,7 +21,11 @@ const ProductSelector: FC<ProductWithImage> = (product) => {
 
 	return (
 		<div className="flex flex-col lg:flex-row items-center w-full lg:max-w-[50%] bg-[#fff] p-2">
-			<img alt={title} src={imgSrc} className="w-1/2 object-contain max-h-[300px]" />
+			<img
+				alt={title}
+				src={imgSrc}
+				className={`w-1/2 object-contain max-h-[300px] ${!stock && 'grayscale'}`}
+			/>
 
 			<div className="flex flex-col m-2 w-full items-center lg:items-start lg:w-1/2">
 				<span className="text-xs text-gray font-semibold">
@@ -33,19 +37,27 @@ const ProductSelector: FC<ProductWithImage> = (product) => {
 
 				{stock > 0
 					? <span className="flex items-center text-green gap-x-px">
-						{`Product in stock! (${product.stock})`} <FaRegCheckCircle color="green" />
+						Product in stock! {stock}
+						<FaRegCheckCircle color="green" />
 					</span>
 					: <span className="flex items-center text-red gap-x-px">
-						Product not available <MdOutlineCancel color="red" />
+						Product not available
+						<MdOutlineCancel color="red" />
 					</span>
 				}
 
-				{listingPrice
-					? <div className="flex flex-col items-center lg:items-start">
+				{listingPrice ?
+					<div className="flex flex-col items-center lg:items-start">
 						<div className="font-bold text-xl">
 							${dottedNumber(listingPrice)}
 						</div>
-						{unitValue && salesUnit === 'group' && <span>${dottedNumber(listingPrice / unitValue)} each unit</span>}
+
+						{unitValue && salesUnit === 'group' &&
+							<span>
+								${dottedNumber(listingPrice / unitValue)} each unit
+							</span>
+						}
+
 						<div className="line-through text-gray font-semibold">
 							${dottedNumber(price)}
 						</div>
@@ -58,7 +70,13 @@ const ProductSelector: FC<ProductWithImage> = (product) => {
 				<p className="text-start text-gray font-semibold">
 					{description}
 				</p>
-				{Boolean(product.stock) && <QuantitySelector salesUnit={salesUnit} unitValue={unitValue} product={product} />}
+				{Boolean(stock) &&
+					<QuantitySelector
+						salesUnit={salesUnit}
+						unitValue={unitValue}
+						product={product}
+					/>
+				}
 			</div>
 		</div >
 

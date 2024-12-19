@@ -1,7 +1,8 @@
 import { render } from '@testing-library/react';
+import '@testing-library/jest-dom'
+
 import App from './App';
 import { CartProvider } from './CartContext';
-import '@testing-library/jest-dom'
 
 test('renders the App', () => {
 	const element = render(

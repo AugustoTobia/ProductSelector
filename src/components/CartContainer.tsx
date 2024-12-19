@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 
 import { useCartContext } from "../CartContext";
 
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import { FaAngleDown, FaCartShopping } from "react-icons/fa6";
 
 const CartContainer = ({ children }: { children: React.ReactNode }) => {
 	const [isMaximized, setMaximized] = useState(true);
-	const { cartState } = useCartContext()
+	const { cartState } = useCartContext();
 
 	useEffect(() => {
 		if (!cartState.id) { setMaximized(true) }
 	}, [cartState])
 
-	if (!cartState.id) return
+	if (!cartState.id) return;
 
 	return (
 		<div
@@ -37,8 +37,8 @@ const CartContainer = ({ children }: { children: React.ReactNode }) => {
 				}
 			`}
 		>
-			<div className="flex items-center justify-between">
-				{!isMaximized && <FaAngleUp
+			<div className="flex items-center justify-between mb-2">
+				{!isMaximized && <FaCartShopping
 					color="white"
 					size={25}
 					className="mx-auto cursor-pointer"
@@ -46,7 +46,7 @@ const CartContainer = ({ children }: { children: React.ReactNode }) => {
 				/>}
 
 				{isMaximized && <>
-					<h1 className="text-white font-bold">In Cart</h1>
+					<h1 className="text-white text-xl font-bold">In Cart</h1>
 					<FaAngleDown
 						color="white"
 						className="cursor-pointer"

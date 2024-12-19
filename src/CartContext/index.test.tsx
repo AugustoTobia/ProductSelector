@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CartProvider, useCartContext } from './index';
 import { products } from '../common/mock'

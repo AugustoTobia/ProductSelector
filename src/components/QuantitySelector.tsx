@@ -1,11 +1,15 @@
 import { FC, useEffect, useId, useState } from "react";
 
-import { customValueLabel, labelUnit, ListedProduct, QuantitySelectorProps } from "../types/types";
+import { customValueLabel, labelUnit, QuantitySelectorProps } from "../types/types";
 import { calcGroups } from "../common/utils";
 
 import { useCartContext } from "../CartContext";
 
-const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, product }) => {
+const QuantitySelector: FC<QuantitySelectorProps> = ({
+	salesUnit,
+	unitValue,
+	product
+}) => {
 	const [state, setState] = useState({ unit: 0, group: 0 });
 	const [isInCart, setIsInCart] = useState(false);
 	const { addItemToCart, removeItemFromCart, cartState } = useCartContext()
@@ -20,43 +24,47 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 
 	}, [cartState, product.id])
 
-	const isGroup = salesUnit !== 'unit'
+	const isGroup = salesUnit !== 'unit';
 
 	const handleChangeUnits = (newQuantity: number) => {
-		const truncated = Math.trunc(newQuantity)
+		const truncated = Math.trunc(newQuantity);
 
 		setState(() => {
-			if (newQuantity < 0) return { unit: 0, group: 0 }
-			if (isGroup && newQuantity > product.stock * unitValue!) return { unit: product.stock * unitValue!, group: product.stock }
-			if (!isGroup && newQuantity > product.stock) return { unit: product.stock, group: 0 }
-			return { unit: truncated, group: calcGroups(truncated, unitValue) }
+			if (newQuantity < 0) return { unit: 0, group: 0 };
+
+			if (isGroup && newQuantity > product.stock * unitValue!) {
+				return { unit: product.stock * unitValue!, group: product.stock }
+			}
+
+			if (!isGroup && newQuantity > product.stock) {
+				return { unit: product.stock, group: 0 }
+			}
+
+			return { unit: truncated, group: calcGroups(truncated, unitValue) };
 		})
 	}
 
 	const handleChangeGroups = (newQuantity: number) => {
 		const truncated = Math.trunc(newQuantity)
 		setState(() => {
-			if (newQuantity < 0) return { unit: 0, group: 0 }
-			if (newQuantity > product.stock) return { unit: product.stock * unitValue!, group: product.stock }
-			return { unit: unitValue! * truncated, group: truncated }
+			if (newQuantity < 0) return { unit: 0, group: 0 };
+
+			if (newQuantity > product.stock) {
+				return { unit: product.stock * unitValue!, group: product.stock }
+			}
+
+			return { unit: unitValue! * truncated, group: truncated };
 		})
-	}
-
-	const handleSubmit = (submitted: ListedProduct) => {
-		let newProduct = submitted
-		if (submitted.quantity > product.stock) {
-			newProduct.quantity = product.stock
-
-		}
-		addItemToCart(newProduct)
 	}
 
 	return (<div className="w-full flex flex-col">
 		<div className="flex gap-x-4 w-full justify-center">
-			{isGroup
-				? <>
+			{isGroup ?
+				<>
 					<div className="flex gap-x-2">
-						<label htmlFor={unitLabelId}>{customValueLabel[salesUnit]}</label>
+						<label htmlFor={unitLabelId}>
+							{customValueLabel[salesUnit]}
+						</label>
 						<input
 							type="number"
 							id={unitLabelId}
@@ -67,7 +75,9 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 						/>
 					</div>
 					<div className="flex gap-x-2">
-						<label htmlFor={groupLabelId}>{labelUnit[salesUnit]}</label>
+						<label htmlFor={groupLabelId}>
+							{labelUnit[salesUnit]}
+						</label>
 						<input
 							type="number"
 							id={groupLabelId}
@@ -80,7 +90,9 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 					</div>
 				</>
 				: <div className="flex gap-x-2">
-					<label htmlFor={unitInGroupLabelId}>Units</label>
+					<label htmlFor={unitInGroupLabelId}>
+						Units
+					</label>
 					<input
 						type="number"
 						id={unitInGroupLabelId}
@@ -93,16 +105,21 @@ const QuantitySelector: FC<QuantitySelectorProps> = ({ salesUnit, unitValue, pro
 			}
 		</div>
 
-		<div className="flex flex-col gap-y-2 m-2">
+		<div className="flex flex-col items-center gap-y-2 m-2">
 			<button
-				className="rounded-lg bg-blue w-200 text-white font-bold p-1"
-				onClick={() => { addItemToCart({ product: product, quantity: isGroup ? state.group : state.unit }) }}
+				className="rounded-lg bg-blue w-[200px] text-white font-bold p-1"
+				onClick={() => {
+					addItemToCart({
+						product: product,
+						quantity: isGroup ? state.group : state.unit
+					})
+				}}
 			>
 				{isInCart ? 'Change quantity' : 'Add to Cart'}
 			</button>
 
 			<button
-				className={`${!isInCart && 'invisible'} rounded-lg border-2 border-blue w-200 text-blue font-bold p-1`}
+				className={`${!isInCart && 'invisible'} rounded-lg border-2 border-blue w-[200px] text-blue font-bold p-1`}
 				onClick={() => { removeItemFromCart(product) }}
 			>
 				Remove from Cart

@@ -1,6 +1,7 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
+
 import { Cart, ListedProduct, CartContextProps, Product } from '../types/types';
 
 export const CartContext = createContext<CartContextProps | null>(null);

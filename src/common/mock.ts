@@ -48,5 +48,25 @@ export const products: ProductWithImage[] = [
 		stock: 0,
 		salesUnit: 'unit',
 	
-	}
+	},
+	{
+		imgSrc: rods,
+		id: '100125',
+		title: 'Aluminio 20 mm x 12 m Acindar',
+		description: 'ALUMINIO 20 MM X 12M',
+		price: 56293,
+		stock: 66,
+		salesUnit: 'unit',
+	
+	},
+	{
+		imgSrc: rods,
+		id: '10055',
+		title: 'Aluminio 20 mm x 12 m Acindar',
+		description: 'ALUMINIO 20 MM X 12M',
+		price: 56293,
+		stock: 32,
+		salesUnit: 'unit',
+	
+	},
 ]
