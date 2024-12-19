@@ -4,8 +4,9 @@ import { ProductWithImage } from "../types/types";
 import { dottedNumber } from "../common/utils";
 
 import QuantitySelector from "./QuantitySelector";
-import { FaRegCheckCircle } from "react-icons/fa";
-import { MdOutlineCancel } from "react-icons/md";
+
+import DiscountTag from "./DiscountTag";
+import ProductInStock from "./ProductInStock";
 
 const ProductSelector: FC<ProductWithImage> = (product) => {
 	const {
@@ -27,49 +28,46 @@ const ProductSelector: FC<ProductWithImage> = (product) => {
 				className={`w-1/2 object-contain max-h-[300px] ${!stock && 'grayscale'}`}
 			/>
 
-			<div className="flex flex-col m-2 w-full items-center lg:items-start lg:w-1/2">
-				<span className="text-xs text-gray font-semibold">
-					SKU:{id}
-				</span>
-				<h1 className=" lg:text-lg text-start font-bold ">
-					{title}
-				</h1>
-
-				{stock > 0
-					? <span className="flex items-center text-green gap-x-px">
-						Product in stock! {stock}
-						<FaRegCheckCircle color="green" />
+			<div className="flex flex-col m-2 w-full items-center lg:items-start lg:w-1/2 gap-y-2">
+				<div className="flex flex-col items-center lg:items-start">
+					<span className="text-xs text-gray font-semibold">
+						SKU:{id}
 					</span>
-					: <span className="flex items-center text-red gap-x-px">
-						Product not available
-						<MdOutlineCancel color="red" />
-					</span>
-				}
+					<h1 className="text-center font-bold lg:text-lg lg:text-start  ">
+						{title}
+						<ProductInStock stock={stock} />
+					</h1>
+				</div>
 
-				{listingPrice ?
-					<div className="flex flex-col items-center lg:items-start">
-						<div className="font-bold text-xl">
-							${dottedNumber(listingPrice)}
+				<div >
+					{listingPrice ?
+						<div className="flex flex-col items-center lg:items-start">
+							<div>
+								<span className="line-through text-gray font-semibold">
+									${dottedNumber(price)}
+								</span>
+							</div>
+							<div className="font-bold text-xl">
+								${dottedNumber(listingPrice)}
+								<DiscountTag initialPrice={listingPrice} descountedPrice={price} />
+							</div>
+
+							{unitValue && salesUnit === 'group' &&
+								<span className="italic text-sm font-bold text-gray">
+									${dottedNumber(listingPrice / unitValue)} for unit
+								</span>
+							}
 						</div>
-
-						{unitValue && salesUnit === 'group' &&
-							<span>
-								${dottedNumber(listingPrice / unitValue)} each unit
-							</span>
-						}
-
-						<div className="line-through text-gray font-semibold">
+						: <div className="font-bold text-lg">
 							${dottedNumber(price)}
 						</div>
-					</div>
-					: <div className="font-bold text-lg">
-						${dottedNumber(price)}
-					</div>
-				}
+					}
+				</div>
 
-				<p className="text-start text-gray font-semibold">
+				<p className="text-start text-lg text-gray font-semibold">
 					{description}
 				</p>
+
 				{Boolean(stock) &&
 					<QuantitySelector
 						salesUnit={salesUnit}
@@ -77,6 +75,7 @@ const ProductSelector: FC<ProductWithImage> = (product) => {
 						product={product}
 					/>
 				}
+
 			</div>
 		</div >
 
